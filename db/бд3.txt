@@ -1,0 +1,80 @@
+1.SELECT Назва FROM dbo.books WHERE Цена = NULL OR Цена = 0
+2.SELECT Назва FROM dbo.books WHERE Цена = NOT NULL AND Тираж = NULL
+3.SELECT Назва FROM dbo.books WHERE Дата = NULL
+4.SELECT Назва FROM dbo.books WHERE YEAR(Дата) > GETDATE()-1
+5.SELECT Назва FROM dbo.books WHERE Новинка = 1 ORDER BY Цена ASC
+6.SELECT Назва FROM dbo.books WHERE Сторинки > 300 AND Сторинки < 400 ORDER BY Назва DESC
+7.SELECT Назва FROM dbo.books WHERE Цена > 20 AND Цена < 40 ORDER BY Дата DESC
+8.SELECT Цена FROM dbo.books  ORDER BY Цена DESC,Назва ASC
+9.SELECT Цена FROM dbo.books WHERE (Цена/Сторинки) < 0.10
+10.SELECT LEN(Назва),
+UPPER(SUBSTRING(Назва,1,20)) FROM dbo.books 
+11.SELECT
+CONCAT(SUBSTRING(Назва,1,10),'...',SUBSTRING(Назва,LEN(Назва)-10,10)) FROM dbo.books 
+12.SELECT[Назва]
+,[Дата],DAY(Дата),MONTH(Дата),YEAR(Дата)
+      
+  FROM [Investors].[dbo].[books]
+13.SELECT[Назва]
+,[Дата],CONCAT(DAY(Дата),'/',MONTH(Дата),'/',YEAR(Дата))
+      
+  FROM [Investors].[dbo].[books]
+14.
+15.SELECT Цена,CAST(Цена AS DECIMAL),(CAST(CEILING(Цена)AS DECIMAL))
+      
+  FROM [Investors].[dbo].[books]
+16.INSERT INTO [dbo].[books]
+           ([N]
+           ,[Код]
+           ,[Новинка]
+           ,[Назва]
+           ,[Цена]
+           ,[Видавництво]
+           ,[Сторинки]
+           ,[Формат]
+           ,[Дата]
+           ,[Тираж]
+           ,[Тема]
+           ,[Категория])
+     VALUES
+           (<N, int,>
+           ,<Код, int,>
+           ,<Новинка, nchar(10),>
+           ,<Назва, nchar(100),>
+           ,<Цена, smallmoney,>
+           ,<Видавництво, nchar(30),>
+           ,<Сторинки, int,>
+           ,<Формат, nchar(20),>
+           ,<Дата, date,>
+           ,<Тираж, int,>
+           ,<Тема, nchar(30),>
+           ,<Категория, nchar(30),>)
+GO
+
+17.INSERT INTO [dbo].[books]
+           ([N]
+           ,[Код]
+           ,[Назва]
+           ,[Цена]
+           ,[Сторинки]
+           ,[Формат]
+           ,[Тираж]
+           ,[Категория])
+     VALUES
+           (<N, int,>
+           ,<Код, int,>
+           ,<Назва, nchar(100),>
+           ,<Цена, smallmoney,>
+           ,<Сторинки, int,>
+           ,<Формат, nchar(20),>
+           ,<Тираж, int,>
+           ,<Категория, nchar(30),>)
+GO
+
+18.IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[books]') AND type in (N'U')AND YEAR(Дата)<1990)
+DROP ROW
+GO
+19.IF (SELECT Дата FROM dbo.books) = NULL
+	UPDATE dbo.books SET Дата = GETDATE()
+20.IF (SELECT YEAR(Дата) FROM dbo.books) > 2005
+	UPDATE dbo.books SET Новинка = 1

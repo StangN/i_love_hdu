@@ -1,0 +1,57 @@
+1.SELECT   [N]
+      ,[Код]
+      ,[Новинка]
+      ,[Назва]
+      ,[Цена]     
+  FROM [Investors].[dbo].[books]
+2.SELECT   [N]
+      ,[Код]
+      ,[Новинка]
+      ,[Назва]
+      ,[Цена]
+      ,[Видавництво]
+      ,[Сторинки]
+      ,[Формат]
+      ,[Дата]
+      ,[Тираж]
+      ,[Тема]
+      ,[Категория]
+  FROM [Investors].[dbo].[books]
+3.SELECT   
+       [Код]     
+      ,[Назва]
+	  ,[Новинка]
+	  ,[Сторинки]
+      ,[Цена]
+	  ,[N]
+      
+  FROM [Investors].[dbo].[books]
+4.SELECT TOP (10) [N]
+      ,[Код]
+      ,[Новинка]
+      ,[Назва]
+      ,[Цена]
+      ,[Видавництво]
+      ,[Сторинки]
+      ,[Формат]
+      ,[Дата]
+      ,[Тираж]
+      ,[Тема]
+      ,[Категория]
+  FROM [Investors].[dbo].[books]
+5.SELECT TOP 10 PERCENT * FROM dbo.books;
+6.SELECT DISTINCT Код FROM dbo.books
+7.SELECT * FROM dbo.books WHERE Новинка = 1
+8.SELECT * FROM dbo.books WHERE Новинка = 1 AND Цена > 20 AND Цена < 30
+9.SELECT * FROM dbo.books WHERE Новинка = 1 AND Цена < 20 AND Цена > 30
+10.SELECT * FROM dbo.books WHERE Сторинки > 300 AND Сторинки < 400 AND Цена > 20 AND Цена < 30
+11.SELECT * FROM dbo.books WHERE Дата > '2000-12-01' AND Дата < '2001-02-01'
+12.SELECT * FROM dbo.books WHERE Код = 5110 OR Код = 5141 OR Код = 4985 OR Код = 4241
+13.SELECT * FROM dbo.books WHERE YEAR(Дата) = 1999 OR YEAR(Дата) = 2001 OR YEAR(Дата) = 2003 OR YEAR(Дата) = 2005
+14.SELECT Назва FROM dbo.books WHERE Назва LIKE '[А-К]%' 
+15.SELECT Назва FROM dbo.books WHERE Назва LIKE 'АПП%' AND YEAR(Дата) = 2000 AND Цена < 20
+16.SELECT Назва FROM dbo.books WHERE Назва LIKE 'АПП%е' AND YEAR(Дата) = 2000 AND MONTH(Дата) < 6
+17.SELECT Назва FROM dbo.books WHERE Назва NOT LIKE 'Microsoft' AND Назва LIKE 'Windows'
+18.SELECT Назва FROM dbo.books WHERE Назва LIKE '%[0-9]%'
+19.SELECT Назва FROM dbo.books WHERE Назва LIKE '%[0-9]%[0-9]%[0-9]%'
+20.SELECT Назва FROM dbo.books WHERE Назва LIKE '[0-9]%[0-9]%[0-9]%[0-9]%[0-9]'

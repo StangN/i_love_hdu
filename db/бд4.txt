@@ -1,0 +1,33 @@
+1.SELECT COUNT(N),SUM(Price),AVG(Price),MIN(Price),MAX(Price)
+  FROM [Investors].[dbo].[books]
+2.SELECT COUNT(Price) FROM dbo.books WHERE (Price != NULL)
+3.DECLARE @new int
+DECLARE @nonew int
+SELECT @new =COUNT(New) FROM dbo.books WHERE New = 1
+SELECT @nonew =COUNT(New) FROM dbo.books WHERE New = 0
+SELECT CONCAT(@new,'/',@nonew)
+4.DECLARE @new int
+DECLARE @nonew int
+SELECT @new =COUNT(New) FROM dbo.books WHERE YEAR(Date) = 1999
+SELECT @nonew =COUNT(New) FROM dbo.books WHERE YEAR(Date) = 2000
+SELECT CONCAT(@new,'/',@nonew)
+5.DECLARE @new int
+DECLARE @nonew int
+SELECT @new =COUNT(New) FROM dbo.books WHERE YEAR(Date) = 1999 AND (Price <10 OR Price >20)
+SELECT @nonew =COUNT(New) FROM dbo.books WHERE YEAR(Date) = 2000 AND (Price <10 OR Price >20)
+SELECT CONCAT(@new,'/',@nonew)
+6.
+7.
+8.
+9.
+10.
+11.
+12.
+13.
+14.
+15.
+16.
+17.
+18.
+19.
+20.
