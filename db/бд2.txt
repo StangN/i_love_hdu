@@ -54,4 +54,4 @@
 17.SELECT Назва FROM dbo.books WHERE Назва NOT LIKE 'Microsoft' AND Назва LIKE 'Windows'
 18.SELECT Назва FROM dbo.books WHERE Назва LIKE '%[0-9]%'
 19.SELECT Назва FROM dbo.books WHERE Назва LIKE '%[0-9]%[0-9]%[0-9]%'
-20.SELECT Назва FROM dbo.books WHERE Назва LIKE '[0-9]%[0-9]%[0-9]%[0-9]%[0-9]'
+20.SELECT * FROM dbo.books WHERE (LENGTH(name)-LENGTH(REGEXP_REPLACE(name, '[0-9]','')))=5
