@@ -16,18 +16,23 @@ DECLARE @nonew int
 SELECT @new =COUNT(New) FROM dbo.books WHERE YEAR(Date) = 1999 AND (Price <10 OR Price >20)
 SELECT @nonew =COUNT(New) FROM dbo.books WHERE YEAR(Date) = 2000 AND (Price <10 OR Price >20)
 SELECT CONCAT(@new,'/',@nonew)
-6.
-7.
-8.
-9.
-10.
-11.
-12.
-13.
-14.
-15.
-16.
-17.
-18.
-19.
-20.
+6.DECLARE @new int
+DECLARE @nonew int
+SELECT @new =COUNT(New) FROM dbo.books WHERE YEAR(Date) = 1999 AND (Price <10 OR Price >20)
+SELECT @nonew =COUNT(New) FROM dbo.books WHERE YEAR(Date) = 2000 AND (Price <10 OR Price >20)
+SELECT CONCAT(@new,'/',@nonew),Price FROM dbo.books  ORDER BY (Price) DESC
+7.SELECT COUNT(DISTINCT(Code)),COUNT(Code) FROM dbo.books 
+8.SELECT COUNT(N), Price  from books GROUP by LEFT(NAME, 1)  # 8 Вивести статистику: загальна кількість і вартість книг по першій букві її назви
+9.SELECT LEFT(NAME, 1),COUNT(N), Price  from books WHERE NAME NOT REGEXP '^[a-z]|[0-9]'  GROUP by LEFT(NAME, 1)  #9 Змінити п. 8, виключивши з статистики назви що починаються з англ. букви або з цифри.
+10.SELECT LEFT(NAME, 1),COUNT(N), Price from books WHERE NAME NOT REGEXP '^[a-z]|[0-9]' AND YEAR(Date) > 2000 GROUP by LEFT(NAME, 1) #10 Змінити п. 9 так щоб до складу статистики потрапили дані з роками більшими за 2000.
+11.SELECT LEFT(NAME, 1),COUNT(N), Price from books WHERE NAME NOT REGEXP '^[a-z]|[0-9]' GROUP by LEFT(NAME, 1) ORDER BY NAME #11 Змінити п. 10. Відсортувати статистику по спадаючій перших букв назви.
+12.SELECT COUNT(N),SUM(Price), AVG(Price), MIN(Price), MAX(Price) FROM books GROUP by year(Date), month(Date) # 11 Вивести статистику (див. 1) по кожному місяцю кожного року.
+13.SELECT COUNT(N),SUM(Price), AVG(Price), MIN(Price), MAX(Price) FROM books  WHERE Data1 NOT null GROUP by year(Date), month(Date) #З 12 мінити п. 12 так щоб до складу статистики не увійшли дані з незаповненими датами. 
+14.SELECT YEAR(Data1),month(Date), COUNT(N),SUM(Price), AVG(Price), MIN(Price), MAX(Price) FROM books GROUP by year(Date), month(Date) ORDER BY Year(Date) DESC  # 14 Змінити п. 12. Фільтр по спадаючій року і зростанню місяця.
+15.SELECT SUM(Price), SUM(Price*28.7) UAH, SUM(Price*0.82) EUR, SUM(Price*74.24) RUB FROM books # 15 Вивести статистику для книг новинка / не новинка: загальна ціна, загальна ціна в грн. / Євро / руб. Колонкам запиту дати назви за змістом.
+16.SELECT SUM(Price), ROUND(SUM(Price*28.7),0) UAH, ROUND (SUM(Price*0.82),0) EUR, ROUND (SUM(Price*74.24),0) RUB FROM books #16 Змінити п. 15 так щоб виводилася округлена до цілого числа (дол. / Грн. / Євро / руб.) Ціна.
+17.SELECT COUNT(N),Publishing_house,SUM(Price), AVG(Price), MIN(Price), MAX(Price) FROM books GROUP BY Publishing_house #17 вивести статистику (див. 1) по видавництвах.
+18.SELECT COUNT(N),Publishing_house,SUM(Price), AVG(Price), MIN(Price), MAX(Price) FROM books GROUP BY Theme, Publishing_house ORDER by Publishing_house #18 Вивести статистику (див. 1) за темами і видавництвами. Фільтр по видавництвам.
+19.SELECT Category, Theme, Publishing_house, COUNT(N), SUM(Price), AVG(Price), MIN(Price), MAX(Price) FROM books GROUP BY Category, Theme, Publishing_house ORDER BY Publishing_house, Theme, Category# 19 Вивести статистику (див. 1) за категоріями, темами і видавництвами. Фільтр по видавництвам, темах, категоріям.
+20.SELECT Publishing_house FROM books WHERE TRUNCATE((Price*27.82)/ Pages, 0) > 0.1 # 20 Вивести список видавництв, у яких округлена до цілого ціна однієї сторінки більше 10 копійок. 
+
