@@ -1,0 +1,131 @@
+1.SELECT Naming, Price, PublisherName 
+FROM books, publishers
+WHERE books.Publisher = Publishers.Id;
+2.SELECT Naming, Price, PublisherName 
+FROM books
+INNER JOIN publishers
+ON books.Publisher = Publishers.Id;
+3.SELECT Naming, Price, PublisherName ,CategoryName
+FROM books
+JOIN publishers
+ON books.Publisher = Publishers.Id
+
+JOIN Categories
+ON books.Category = Categories.Id;
+4.SELECT Naming, Price, PublisherName ,CategoryName,TopicName
+FROM books
+JOIN publishers
+ON books.Publisher = Publishers.Id
+
+JOIN Categories
+ON books.Category = Categories.Id;
+
+JOIN Topics
+ON books.Topic = Topics.Id;
+5.SELECT *
+FROM books
+WHERE publisher = 1 AND YEAR(Date) > 2000;
+6.SELECT CategoryName SUM(Pages) 
+FROM books
+JOIN CategoryName
+  ON books.Category = Categories.id
+GROUP BY Category
+ORDER BY Pages;
+7.SELECT AVG(price)
+FROM books
+WHERE books.Topic = 1 AND books.Category = 6;
+8.SELECT
+  books.*,
+  PublisherName,
+  CategoryName,
+  TopicName
+
+FROM
+  books,
+  Publishers,
+  Categories,
+  Topics
+WHERE 
+  books.Publisher = Publishers.Id AND
+  books.Category = Category.Id AND
+  books.Topic = Categories.Id 
+9.SELECT
+  books.*,
+  PublisherName,
+  CategoryName,
+  TopicName
+FROM books
+
+INNER JOIN publishers
+ON books.Publisher = Publishers.Id
+
+INNER JOIN Categories
+ON books.Category = Categories.Id;
+
+INNER JOIN Topics
+ON books.Topic = Topics.Id;
+10.SELECT
+  books.*,
+  PublisherName,
+  CategoryName,
+  TopicName
+FROM books
+
+LEFT JOIN publishers
+ON books.Publisher = Publishers.Id
+
+LEFT JOIN Categories
+ON books.Category = Categories.Id;
+
+LEFT JOIN Topics
+ON books.Topic = Topics.Id;
+
+SELECT
+  books.*,
+  PublisherName,
+  CategoryName,
+  TopicName
+FROM books
+
+RIGHT JOIN publishers
+ON books.Publisher = Publishers.Id
+
+RIGHT JOIN Categories
+ON books.Category = Categories.Id;
+
+RIGHT JOIN Topics
+ON books.Topic = Topics.Id;
+13.SELECT * from books 
+WHERE category = (SELECT Id from Categories WHERE CategoryName = 'C&C++')
+14.SELECT * from books 
+WHERE publisher = (SELECT Id from Publishers WHERE PublisherName = 'BHV')
+15.SELECT *
+FROM publishers
+WHERE (SELECT MIN(pages_count) FROM books WHERE books.publisher_id = publishers.id) > 400;
+16.SELECT *
+FROM book_categories
+WHERE (SELECT COUNT(*) FROM books WHERE books.category = book_categories.id) > 3;
+17.SELECT *
+FROM books
+WHERE EXISTS (SELECT * FROM publishers WHERE publishers.name = 'BHV' AND publishers.id = books.publisher_id);
+18.SELECT *
+FROM books
+WHERE 
+  NOT EXISTS (SELECT * FROM publishers WHERE publishers.name = 'BHV С.-Петербург' AND publishers.id = books.publisher_id)
+  AND publisher_id = (SELECT publishers.id FROM publishers WHERE publishers.name = 'BHV');
+19.((SELECT * FROM book_themes)
+UNION 
+(SELECT * FROM book_categories))
+ORDER BY name;
+20.SELECT DISTINCT name FROM (
+  (
+    SELECT REGEXP_SUBSTR(TRIM(book_name), '^[^\\s]+') as name
+    FROM books
+  )
+  UNION ALL
+  (
+    SELECT REGEXP_SUBSTR(TRIM(name), '^[^\\s]+') as name
+    FROM book_categories
+  )
+) names
+ORDER BY name DESC;
