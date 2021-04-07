@@ -1,0 +1,242 @@
+1.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo1]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT Naming, Price, PublisherName 
+  FROM books   
+  JOIN publishers
+  ON books.Publisher = Publishers.Id
+END
+2.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo2]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT TopicName,CategoryName,Naming, PublisherName 
+  FROM books   
+	JOIN publishers
+  ON books.Publisher = Publishers.Id
+    JOIN Categories
+  ON books.Category = Categories.Id
+    JOIN Topics
+  ON books.Topic = Topics.Id
+END
+3.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo3]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT Naming, PublisherName 
+  FROM books   
+	JOIN publishers
+  ON books.Publisher = Publishers.Id
+    WHERE PublisherName = 'BHV' AND Year(Date) >2000
+END
+4.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo4]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT CategoryName,SUM(Pages)
+  FROM books   
+	JOIN Categories
+  ON books.Category = Categories.Id
+	GROUP BY CategoryName
+	ORDER BY SUM(Pages) DESC
+END
+5.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo5]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT AVG(Price)
+  FROM books   
+	JOIN Categories
+  ON books.Category = Categories.Id
+	JOIN Topics
+  ON books.Topic = Topics.Id
+	WHERE TopicName = 'Використання ПК' AND CategoryName = 'Linux'
+END
+6.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo6]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT CategoryName,PublisherName,TopicName,Naming
+  FROM books   
+	LEFT JOIN Categories
+  ON books.Category = Categories.Id
+	LEFT JOIN Topics
+  ON books.Topic = Topics.Id
+	LEFT JOIN Publishers
+  ON books.Publisher = Publishers.Id
+	
+END
+7.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo7]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT Pages,COUNT(Naming)
+  FROM books   
+	GROUP BY Pages
+	HAVING COUNT(Naming)>1
+	
+END
+8.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo8]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT Price,COUNT(Naming)
+  FROM books   
+	GROUP BY Price
+	HAVING COUNT(Naming)>2
+	
+END
+9.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo9]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT Naming ,CategoryName
+  FROM books   
+	JOIN Categories
+	ON books.Category = Categories.Id
+	WHERE CategoryName = 'C++'
+	
+	
+END
+10.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo10]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	  SELECT *
+  FROM publishers
+  WHERE (SELECT MIN(Pages) FROM books WHERE books.Publisher = Publishers.Id) > 400;
+	
+END
+11.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo11]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	  SELECT CategoryName,COUNT(Naming)
+  FROM books
+  JOIN Categories
+  ON books.Category = Categories.Id
+  GROUP BY CategoryName
+	HAVING COUNT(Naming) > 3
+END
+12.GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo12]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	  SELECT *
+  FROM books
+  WHERE EXISTS (SELECT * FROM publishers WHERE PublisherName = 'BHV' AND publishers.id = books.publisher);
+END
+13.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo13]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	  SELECT *
+  FROM books
+  WHERE NOT EXISTS (SELECT * FROM publishers WHERE PublisherName = 'BHV' AND publishers.id = books.publisher)
+  AND publisher = (SELECT publishers.id FROM publishers WHERE PublisherName = 'BHV');
+END
+14.USE [Investors]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetBookInfo14]	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	  ((SELECT * FROM Topics)
+  UNION 
+  (SELECT * FROM Categories))
+  ORDER BY TopicName;
+END
+15.SELECT DISTINCT name FROM (
+    (
+      SELECT REGEXP_SUBSTR(TRIM(book_name), '^[^\\s]+') as name
+      FROM books
+    )
+    UNION ALL
+    (
+      SELECT REGEXP_SUBSTR(TRIM(name), '^[^\\s]+') as name
+      FROM book_categories
+    )
+  ) names
+  ORDER BY name DESC;
