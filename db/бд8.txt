@@ -1,0 +1,228 @@
+1.USE [Investors]
+GO
+/****** Object:  Trigger [dbo].[TopicAmount]    Script Date: 17.04.2021 18:22:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER TRIGGER [dbo].[TopicAmount]
+   ON  [dbo].[Topics]
+   INSTEAD OF INSERT
+AS 
+	DECLARE @ct INT
+	DECLARE @ss INT
+	DECLARE @tuz NCHAR
+	SELECT @ct = COUNT(Id) FROM Topics
+	SELECT @ss = Id FROM inserted
+	SELECT @tuz = TopicName FROM inserted
+   IF @ct > 10 
+   raiserror('Oh no a fatal error', 20, -1) with log
+   ELSE INSERT INTO Topics (Id,TopicName) VALUES (@ss,@tuz)
+USE [Investors]
+GO
+/****** Object:  Trigger [dbo].[TopicAmount]    Script Date: 17.04.2021 18:11:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER TopicAmount2
+   ON  [dbo].[Topics]
+   INSTEAD OF DELETE
+AS 
+	DECLARE @ct INT
+	DECLARE @ss INT
+	DECLARE @tuz NCHAR
+	SELECT @jopa = COUNT(Id) FROM Topics
+	SELECT @ss = Id FROM inserted
+   IF @ct < 5
+   raiserror('Oh no a fatal error', 20, -1) with log
+   ELSE DELETE FROM Topics WHERE Id = @ss
+2.USE [Investors]
+GO
+/****** Object:  Trigger [dbo].[TopicAmount]    Script Date: 17.04.2021 18:22:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER Novinki
+   ON  books
+   AFTER INSERT
+AS 
+	DECLARE @yr INT
+	SELECT @yr = YEAR(Date) FROM books
+   IF @yr != YEAR(GETDATE())
+   UPDATE books 
+   SET New = 0
+3.USE [Investors]
+GO
+/****** Object:  Trigger [dbo].[TopicAmount]    Script Date: 17.04.2021 18:22:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER FixPrice
+   ON  books
+   AFTER INSERT
+AS 
+	DECLARE @pg INT
+	DECLARE @pc INT
+	SELECT @pg = Pages FROM books
+	SELECT @pc = Price FROM books
+   IF @pg < 100 AND @pc > 10
+   UPDATE books 
+   SET Price = 10
+   IF @pg >= 100  AND @pg < 200 AND @pc > 20
+   UPDATE books 
+   SET Price = 20
+   IF @pg >= 200 AND @pg < 300 AND @pc > 30
+   UPDATE books 
+   SET Price = 30
+4./****** Object:  Trigger [dbo].[TopicAmount]    Script Date: 17.04.2021 18:22:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER FixTiraj
+   ON  books
+   AFTER INSERT
+AS 
+	DECLARE @tj INT
+	DECLARE @pb INT
+	DECLARE @tuz INT
+	SELECT @tj = Tiraj FROM books
+	SELECT @pb = Publisher FROM books
+	SELECT @tuz = N FROM books
+   IF @tj < 5000 AND @pb = 1
+   UPDATE books 
+   SET Tiraj = 5000 WHERE N = @tuz
+   IF @tj <10000 AND @pb = 6
+   UPDATE books 
+   SET Tiraj = 10000 WHERE N = @tuz
+6.USE [Investors]
+GO
+/****** Object:  Trigger [dbo].[TopicAmount]    Script Date: 17.04.2021 18:22:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER DeleteInfo
+   ON  books
+   INSTEAD OF DELETE
+AS 
+	DECLARE @tj INT
+	DECLARE @user INT
+	DECLARE @tuz INT
+	SELECT @tj = Tiraj FROM books
+	SELECT @ass = USER
+	SELECT @tuz = N FROM books
+   IF @user != 'dbo'
+   raiserror('Oh no a fatal error', 20, -1) with log
+   ELSE
+   SELECT COUNT(*)
+   FROM INFORMATION_SCHEMA.COLUMNS
+   WHERE table_catalog = 'Investors'
+   AND table_name = 'books'
+7.USE [Investors]
+GO
+/****** Object:  Trigger [dbo].[TopicAmount]    Script Date: 17.04.2021 18:22:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER UpdatePrice
+   ON  books
+   INSTEAD OF UPDATE
+AS 
+	DECLARE @pc INT
+	DECLARE @user INT
+	DECLARE @tuz INT
+	SELECT @pc = Price FROM inserted
+	SELECT @user = USER
+	SELECT @tuz = N FROM books
+   IF @user = 'dbo'
+   raiserror('Oh no a fatal error', 20, -1) with log
+   ELSE
+   UPDATE books 
+   SET Price = @pc WHERE N = @tuz
+8.USE [Investors]
+GO
+/****** Object:  Trigger [dbo].[TopicAmount2]    Script Date: 17.04.2021 19:11:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER CategoryException
+   ON books
+   AFTER INSERT
+AS 
+	DECLARE @ct INT
+	DECLARE @pb INT
+	DECLARE @tuz NCHAR
+	SELECT @ct = Category FROM books
+	SELECT @pb = Publisher FROM books
+   IF @ct = 1 AND (@pb = 5 OR @pb = 7)
+   raiserror('Oh no a fatal error', 20, -1) with log
+10USE [Investors]
+GO
+/****** Object:  Trigger [dbo].[TopicAmount2]    Script Date: 17.04.2021 19:11:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER CategoryException
+   ON books
+   AFTER INSERT
+AS 
+	DECLARE @fm INT
+	DECLARE @pb INT
+	DECLARE @tuz NCHAR
+	SELECT @fm = Format FROM books
+	SELECT @pb = Publisher FROM books
+   IF @fm = '60x88 / 16' AND @pb = 1
+   raiserror('Oh no a fatal error', 20, -1) with log
+   . 
